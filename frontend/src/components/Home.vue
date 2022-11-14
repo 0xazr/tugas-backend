@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center items-center w-full h-screen bg-neutral-200 text-neutral-900">
-    <div class="m-9 p-9 w-1/3 bg-neutral-50 shadow-lg">
+    <div class="m-9 p-9 w-96 bg-neutral-50 shadow-lg">
       <h1 class="font-bold text-2xl">Register</h1>
       <h1 class="text-sm">Please fill out all the fields.</h1>
 

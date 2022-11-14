@@ -1,5 +1,24 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+} from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBgZYJoUhN2if_IeCB-RQB2Hz_yV_ZCfV8",
+  authDomain: "simple-todo-app-c5a3b.firebaseapp.com",
+  projectId: "simple-todo-app-c5a3b",
+  storageBucket: "simple-todo-app-c5a3b.appspot.com",
+  messagingSenderId: "740962103721",
+  appId: "1:740962103721:web:d847f722b57dc69d2894b8",
+  measurementId: "G-J6X7HZLJ46"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export const useApp = defineStore({
     id: "App",
@@ -17,13 +36,13 @@ export const useApp = defineStore({
     }),
     actions: {
       async getUsers() {
-        axios.get('http://127.0.0.1:3000/users')
-          .then((response) => {
-            this.users = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+        onSnapshot(collection(db, "users"), (querySnapshot) => {
+          let users = [];
+          querySnapshot.forEach((doc) => {
+            users.push({ id: doc.id, ...doc.data() });
+          });
+          this.users = users;
+        });
       },
       async addUser(user) {
         await axios.post('http://127.0.0.1:3000/users', {
@@ -32,11 +51,9 @@ export const useApp = defineStore({
         });
         this.input.user.name = '';
         this.input.user.email = '';
-        this.getUsers();
       },
       async deleteUser(user_id) {
         await axios.delete('http://127.0.0.1:3000/users/' + user_id);
-        this.getUsers();
       },
       showEditUserMenu(user_id) {
         let user = this.users.find(user => user.id === user_id);
@@ -53,7 +70,6 @@ export const useApp = defineStore({
       },
       async editUser(user) {
         await axios.patch('http://127.0.0.1:3000/users/' + user.id, user);
-        this.getUsers();
         this.closeEditUserMenu();
       }
     },

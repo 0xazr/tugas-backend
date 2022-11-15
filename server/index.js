@@ -68,7 +68,10 @@ app.post('/users', body('email').isEmail(), (req, res) => {
   try {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      return res.status(400).json({ errors: error.array() });
+      return res.send({
+        status: false,
+        message: 'Invalid email',
+      });
     }
     var nama = req.body.nama;
     var email = req.body.email;

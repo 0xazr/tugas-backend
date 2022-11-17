@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon index.js"
+    "start": "nodemon app.js
   },
-  "author": "",
+  "author": "Pweb Kelas A",
   "license": "ISC",
   "type": "module",
   "dependencies": {
